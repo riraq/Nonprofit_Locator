@@ -23,3 +23,30 @@ function getOrgs(searchedCity) {
             alert("Unable to connect to ProPublica NonProfit Explorer");
         });
 };
+
+// function to save prior searches
+
+// function recordSearch() {
+//     var input = $("#search").val();
+//     var searches = getSearches();
+//     searches.push({initials: inputInitials, score: currentScore});
+//     searches = searches.sort(function (item, other) {
+//         return parseInt(other.search) - parseInt(item.search)        
+//     });
+//     searches = topScores.slice(0, 5);
+//     localStorage.searches = JSON.stringify(searches); //get this object and transform it into a string that looks like json
+//     $("#").hide();
+//     renderTopScores();
+// }
+// function recordScore() {
+//     var inputInitials = $("#initials").val();
+//     var topScores = getTopScores();
+//     topScores.push({initials: inputInitials, score: currentScore});
+//     topScores = topScores.sort(function (item, other) {
+//         return parseInt(other.score) - parseInt(item.score)        
+//     });
+//     topScores = topScores.slice(0, 5);
+//     localStorage.topScores = JSON.stringify(topScores); //get this object and transform it into a string that looks like json
+//     $("#scorePrompt").hide();
+//     renderTopScores();
+// }
