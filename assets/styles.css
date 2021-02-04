@@ -1,3 +1,28 @@
 .title{
     text-align:center;
+    background-color: lightgray;
+    background-size: 60px;
+    border-style: inset;
+    
+    
+}
+
+#beginning{
+    margin-left: 30px;
+    margin-right:30px;
+    border-top-color: lightgreen;
+    border-top-style: 15px;
+}
+
+#beginning-is-bordered{
+    border: 1px solid black;
+}
+.field.has-addons{
+    display: stretch;
+    place-items: center;
+}
+
+
+.mapboxgl-canary{
+    float:right;
 }

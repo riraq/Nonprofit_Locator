@@ -1,6 +1,8 @@
 var searchBtn = document.getElementById("search-btn");
 var cityInput = document.getElementById("city-search");
 
+var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2"
+
 //inital fetch function below
 
 function getOrgs(searchedCity) {
@@ -26,6 +28,16 @@ function getOrgs(searchedCity) {
 };
 
 // function to save prior searches
+    // array to save city searches
+    //function to move searches into array 
+    //function to store the array
+    //var citySearch = []
+// function recordCity(params) {
+//     var input = "city-search";
+        //input.citySearches.push[]
+// };
+
+
 
 // function recordSearch() {
 //     var input = $("#search").val();
@@ -52,3 +64,40 @@ function getOrgs(searchedCity) {
 //     renderTopScores();
 // }
 searchBtn.addEventListener("click", getOrgs);
+
+
+
+// this code is from the propublica api
+// $ curl https://projects.propublica.org/nonprofits/api/v2/search.json?q=propublica
+
+
+
+// {
+//   "total_results":1,
+//   "organizations":[{
+//     "ein":142007220,
+//     "strein":"14-2007220",
+//     "name":"PRO PUBLICA INC",
+//     "sub_name":"PRO PUBLICA INC",
+//     "city":"NEW YORK",
+//     "state":"NY",
+//     "ntee_code":"A20",
+//     "raw_ntee_code":"A20",
+//     "subseccd":3,
+//     "has_subseccd":true,
+//     "have_filings":null,
+//     "have_extracts":null,
+//     "have_pdfs":null,
+//     "score":11612.384
+//   }],
+//   "num_pages":1,
+//   "cur_page":0,
+//   "page_offset":0,
+//   "per_page":100,
+//   "search_query":"propublica",
+//   "selected_state":null,
+//   "selected_ntee":null,
+//   "selected_code":null,
+//   "data_source":"ProPublica Nonprofit Explorer API: https://projects.propublica.org/nonprofits/api/\nIRS Exempt Organizations Business Master File Extract (EO BMF): https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf\nIRS Annual Extract of Tax-Exempt Organization Financial Data: https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data",
+//   "api_version":2
+// }
