@@ -85,12 +85,15 @@
     <div id='map' style='width: 400px; height: 300px;'></div>
     
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg';
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11'
-        });
-        map.addControl(new mapboxgl.NavigationControl());
+    mapboxgl.accessToken = 'pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg';
+    var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [-95, 37],
+    zoom: 2,
+    });
+    
+    map.addControl(new mapboxgl.NavigationControl());
     </script>
 
     <script src="./assets/script.js"></script>
