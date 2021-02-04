@@ -1,5 +1,6 @@
 var searchBtn = document.getElementById("search-btn");
 var cityInput = document.getElementById("city-search");
+var searchResultsEl = document.getElementById("searchResults")
 
 var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2"
 
@@ -19,6 +20,14 @@ function getOrgs(searchedCity) {
           console.log(response);
           response.json()
           .then(function (data) {
+            for(var i=0; i<searchResultsEl.children.length; i++){
+              searchResultsEl.children[i].children[0].textContent = data.organizations[i].name
+              searchResultsEl.children[i].children[1].textContent = data.organizations[i].city
+              searchResultsEl.children[i].children[2].textContent = data.organizations[i].state
+              searchResultsEl.children[i].children[3].textContent = data.organizations[i].ein
+              searchResultsEl.children[i].children[4].textContent = data.organizations[i].sub_name
+
+            }
             console.log("City searched: " + searchedCity)
             console.log(data);
 
