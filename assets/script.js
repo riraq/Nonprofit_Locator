@@ -31,10 +31,10 @@ function getOrgs(searchedCity) {
               searchResultsEl.children[i].children[4].textContent = data.organizations[i].sub_name
 
               orgArr = data.organizations;
-              console.log("org array: " + orgArr);
+              //console.log("org array: " + orgArr);
 
               readEIN(orgArr);
-              console.log("EINs: " + EINarr);
+              //console.log("EINs: " + EINarr);
 
             }
             console.log("City searched: " + searchedCity)
