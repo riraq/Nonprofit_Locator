@@ -30,15 +30,19 @@ function getOrgs(searchedCity) {
               searchResultsEl.children[i].children[3].textContent = data.organizations[i].ein
               searchResultsEl.children[i].children[4].textContent = data.organizations[i].sub_name
 
-              orgArr = data.organizations;
-              console.log("org array: " + orgArr);
 
-              readEIN(orgArr);
-              console.log("EINs: " + EINarr);
+
 
             }
             console.log("City searched: " + searchedCity)
             console.log(data);
+            orgArr = data.organizations;
+            // console.log("org array: " + orgArr);
+
+            readEIN(orgArr);
+            // console.log("EINs: " + EINarr);
+
+            getAddress(EINarr);
 
           
           });
@@ -126,8 +130,58 @@ searchBtn.addEventListener("click", getOrgs);
 //   "api_version":2
 // }
 
+
+// Reads EIN from each returned org and pushes those numbers into a new array
+// Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
+
 function readEIN(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    EINarr.push(orgArr[i].ein);
+    for (var i = 0; i < 1; i++) {
+      EINarr.push(arr[i].ein);
   }
+
+}
+
+
+// Uses EINs to pull address and ZIP code for each org
+// Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
+
+function getAddress(arr) {
+    for (var i = 0; i < 1; i++) {
+      
+    // console.log("EIN to feed: " + arr[i].toString());  
+    // console.log("Unconverted EIN: " + arr[i]);
+      
+
+      //console.log("Unconverted EIN: " + arr[i] + " / / " + "EIN to feed: " + arr[i].toString());
+
+        var EINsAsString = EINarr[i].toString();
+
+
+        var proxyUrl = "https://cors-anywhere.herokuapp.com/";
+        var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINsAsString + ".json";
+
+        console.log("Type of first EIN: " + typeof(arr[0]));
+       // console.log(EINarr);
+        console.log("second fetch url: " + proxyUrl + searchByEIN);
+
+        fetch(proxyUrl + searchByEIN)
+        .then(function (response) {
+          if (response.ok) {
+            console.log(response);
+            response.json()
+            .then(function (addressData) {
+
+                var addr = addressData.organization.address;
+                console.log("Address: " + addr);
+              
+            
+            });
+          } else {
+            console.log("Error: " + response.statusText);
+          }
+        })
+        .catch(function (error) {
+          console.log("Unable to connect to ProPublica Non-Profit Explorer");
+        });
+      }
 }
