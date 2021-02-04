@@ -4,6 +4,9 @@ var searchResultsEl = document.getElementById("searchResults")
 
 var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2"
 
+var orgArr = [];
+var EINarr = [];
+
 //inital fetch function below
 
 function getOrgs(searchedCity) {
@@ -26,6 +29,12 @@ function getOrgs(searchedCity) {
               searchResultsEl.children[i].children[2].textContent = data.organizations[i].state
               searchResultsEl.children[i].children[3].textContent = data.organizations[i].ein
               searchResultsEl.children[i].children[4].textContent = data.organizations[i].sub_name
+
+              orgArr = data.organizations;
+              console.log("org array: " + orgArr);
+
+              readEIN(orgArr);
+              console.log("EINs: " + EINarr);
 
             }
             console.log("City searched: " + searchedCity)
@@ -116,3 +125,9 @@ searchBtn.addEventListener("click", getOrgs);
 //   "data_source":"ProPublica Nonprofit Explorer API: https://projects.propublica.org/nonprofits/api/\nIRS Exempt Organizations Business Master File Extract (EO BMF): https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf\nIRS Annual Extract of Tax-Exempt Organization Financial Data: https://www.irs.gov/uac/soi-tax-stats-annual-extract-of-tax-exempt-organization-financial-data",
 //   "api_version":2
 // }
+
+function readEIN(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    EINarr.push(orgArr[i].ein);
+  }
+}
