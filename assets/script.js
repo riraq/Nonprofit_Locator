@@ -26,6 +26,16 @@ function getOrgs(searchedCity) {
 };
 
 // function to save prior searches
+    // array to save city searches
+    //function to move searches into array 
+    //function to store the array
+    //var citySearch = []
+// function recordCity(params) {
+//     var input = "city-search";
+        //input.citySearches.push[]
+// };
+
+
 
 // function recordSearch() {
 //     var input = $("#search").val();
