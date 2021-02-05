@@ -173,6 +173,9 @@ function getAddress(arr) {
 
                 var addr = addressData.organization.address;
                 console.log("Address: " + addr);
+
+                var zip = addressData.organization.zipcode;
+                console.log("Zip code: " + zip);
               
             
             });
