@@ -47,6 +47,8 @@ function getOrgs(searchedCity) {
     });
 };
 
+searchBtn.addEventListener("click", getOrgs);
+
 // Reads EIN from each returned org and pushes those numbers into a new array
 // Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
 
