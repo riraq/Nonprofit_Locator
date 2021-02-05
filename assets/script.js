@@ -9,7 +9,7 @@ var EINarr = [];
 
 //inital fetch function below
 
-function getOrgs() {
+function getOrgs(searchedCity) {
   var searchInput = cityInput.value.toLowerCase();
   console.log("City searched: " + searchInput);
   var proxyUrl = "https://cors-anywhere.herokuapp.com/"
@@ -22,20 +22,22 @@ function getOrgs() {
       if (response.ok) {
         console.log(response);
         response.json()
-        .then(function (data) {
-          for(var i=0; i<searchResultsEl.children.length; i++){
-            searchResultsEl.children[i].children[0].textContent = data.organizations[i].name
-            searchResultsEl.children[i].children[1].textContent = data.organizations[i].city
-            searchResultsEl.children[i].children[2].textContent = data.organizations[i].state
-          }
+          .then(function (data) {
+            for (var i = 0; i < searchResultsEl.children.length; i++) {
+              searchResultsEl.children[i].children[0].textContent = data.organizations[i].name
+              searchResultsEl.children[i].children[1].textContent = data.organizations[i].city
+              searchResultsEl.children[i].children[2].textContent = data.organizations[i].state
+            }
+            console.log("City searched: " + searchedCity)
+            console.log(data);
+            orgArr = data.organizations;
+            // console.log("org array: " + orgArr);
 
-          orgArr = data.organizations;
-          readEIN(orgArr);
+            readEIN(orgArr);
+            // console.log("EINs: " + EINarr);
 
-          console.log("org array: " + orgArr);
-          console.log("EINs: " + EINarr);
-          console.log(data);
-        });
+            getAddress(EINarr);
+          });
       } else {
         alert("Error: " + response.statusText);
       }
@@ -45,26 +47,59 @@ function getOrgs() {
     });
 };
 
-
-searchBtn.addEventListener("click", getOrgs);
-
-
-
-
+// Reads EIN from each returned org and pushes those numbers into a new array
+// Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
 
 function readEIN(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    EINarr.push(orgArr[i].ein);
+  for (var i = 0; i < 1; i++) {
+    EINarr.push(arr[i].ein);
   }
 }
 
 
+// Uses EINs to pull address and ZIP code for each org
+// Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
 
+function getAddress(arr) {
+  for (var i = 0; i < 1; i++) {
 
+    // console.log("EIN to feed: " + arr[i].toString());  
+    // console.log("Unconverted EIN: " + arr[i]);
 
+    //console.log("Unconverted EIN: " + arr[i] + " / / " + "EIN to feed: " + arr[i].toString());
 
+    var EINsAsString = EINarr[i].toString();
 
+    var proxyUrl = "https://cors-anywhere.herokuapp.com/";
+    var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINsAsString + ".json";
 
+    console.log("Type of first EIN: " + typeof (arr[0]));
+    // console.log(EINarr);
+    console.log("second fetch url: " + proxyUrl + searchByEIN);
+
+    fetch(proxyUrl + searchByEIN)
+      .then(function (response) {
+        if (response.ok) {
+          console.log(response);
+          response.json()
+            .then(function (addressData) {
+
+              var addr = addressData.organization.address;
+              console.log("Address: " + addr);
+
+              var zip = addressData.organization.zipcode;
+              console.log("Zip code: " + zip);
+
+            });
+        } else {
+          console.log("Error: " + response.statusText);
+        }
+      })
+      .catch(function (error) {
+        console.log("Unable to connect to ProPublica Non-Profit Explorer");
+      });
+  }
+}
 
 
 // this code is from the propublica api
@@ -113,31 +148,6 @@ function readEIN(arr) {
 // };
 
 
-
-// function recordSearch() {
-//     var input = $("#search").val();
-//     var searches = getSearches();
-//     searches.push({initials: inputInitials, score: currentScore});
-//     searches = searches.sort(function (item, other) {
-//         return parseInt(other.search) - parseInt(item.search)        
-//     });
-//     searches = topScores.slice(0, 5);
-//     localStorage.searches = JSON.stringify(searches); //get this object and transform it into a string that looks like json
-//     $("#").hide();
-//     renderTopScores();
-// }
-// function recordScore() {
-//     var inputInitials = $("#initials").val();
-//     var topScores = getTopScores();
-//     topScores.push({initials: inputInitials, score: currentScore});
-//     topScores = topScores.sort(function (item, other) {
-//         return parseInt(other.score) - parseInt(item.score)        
-//     });
-//     topScores = topScores.slice(0, 5);
-//     localStorage.topScores = JSON.stringify(topScores); //get this object and transform it into a string that looks like json
-//     $("#scorePrompt").hide();
-//     renderTopScores();
-// }
 
 
 // access token for retrieving map
