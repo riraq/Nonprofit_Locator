@@ -47,34 +47,34 @@ function getOrgs(searchedCity) {
     });
 };
 
-  
-  //button is clicked
-  searchBtn.onclick = function () {
-    //input field is set to cityInput.value
-    var search_query = cityInput.value;
-    //array to hold search history
-    //output beign over written bc of 62, edit 
-    //was history becuase reffered to histry outside of scope (window history)
-    var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
-    if (searchHistory == null) { searchHistory = []} //initialization of empyt array BEFORE user interacts
-    //["search_query0", "search_query1", "search_query2"]; //edit for JSO
-    /// use array or object then decide how you will add items to the array or object
-    //SHIFT adds to beg of array, push to end 
-    //history[0] = search_query
-    alert("New search for storage? " + search_query + " for storage");
-    // console.log(history);
-    // console.log(typeof history);
-    //cityInput is PUSHED to history array
-    searchHistory.push(search_query);
-    console.log(searchHistory);
-    //history array is saved to loaclStorage
-    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-    console.log(typeof searchHistory);
 
-    return search_query
-    
-  };
-  var storedSearches = JSON.parse(localStorage.getItem("searchHistory")); 
+//button is clicked
+searchBtn.onclick = function () {
+  //input field is set to cityInput.value
+  var search_query = cityInput.value;
+  //array to hold search history
+  //output beign over written bc of 62, edit 
+  //was history becuase reffered to histry outside of scope (window history)
+  var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
+  if (searchHistory == null) { searchHistory = [] } //initialization of empyt array BEFORE user interacts
+  //["search_query0", "search_query1", "search_query2"]; //edit for JSO
+  /// use array or object then decide how you will add items to the array or object
+  //SHIFT adds to beg of array, push to end 
+  //history[0] = search_query
+  //alert("New search for storage? " + search_query + " for storage");
+  // console.log(history);
+  // console.log(typeof history);
+  //cityInput is PUSHED to history array
+  searchHistory.push(search_query);
+  console.log(searchHistory);
+  //history array is saved to loaclStorage
+  localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+  console.log(typeof searchHistory);
+
+  return search_query
+
+};
+var storedSearches = JSON.parse(localStorage.getItem("searchHistory"));
 
 
 
@@ -172,13 +172,13 @@ function getAddress(arr) {
 // }
 // ____________________________________________________________________________________________
 // function to save prior searches
-    // array to save city searches
-    //function to move searches into array 
-    //function to store the array
-    //var citySearch = []
+// array to save city searches
+//function to move searches into array 
+//function to store the array
+//var citySearch = []
 // function recordCity(params) {
 //     var input = "city-search";
-        //input.citySearches.push[]
+//input.citySearches.push[]
 // };
 
 
@@ -241,7 +241,7 @@ var geojson = {
   }]
 };
 
-geojson.features.forEach(function(marker) {
+geojson.features.forEach(function (marker) {
 
   // create a HTML element for each feature
   var el = document.createElement('div');
@@ -255,7 +255,7 @@ geojson.features.forEach(function(marker) {
   new mapboxgl.Marker(el)
     .setLngLat(marker.geometry.coordinates)
     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+      .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
     .addTo(map);
 });
 
