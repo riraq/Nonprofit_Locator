@@ -25,8 +25,8 @@ function getOrgs(searchedCity) {
           .then(function (data) {
             for (var i = 0; i < searchResultsEl.children.length; i++) {
               searchResultsEl.children[i].children[0].textContent = data.organizations[i].name
-              searchResultsEl.children[i].children[1].textContent = data.organizations[i].city
-              searchResultsEl.children[i].children[2].textContent = data.organizations[i].state
+              searchResultsEl.children[i].children[2].textContent = data.organizations[i].city
+              searchResultsEl.children[i].children[3].textContent = data.organizations[i].state
             }
             console.log("City searched: " + searchedCity)
             console.log(data);
@@ -85,7 +85,7 @@ searchBtn.addEventListener("click", getOrgs);
 // Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
 
 function readEIN(arr) {
-  for (var i = 0; i < 1; i++) {
+  for (var i = 0; i < 5; i++) {
     EINarr.push(arr[i].ein);
   }
 }
@@ -95,14 +95,14 @@ function readEIN(arr) {
 // Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
 
 function getAddress(arr) {
-  for (var i = 0; i < 1; i++) {
+  for (var j = 0; j < 5; j++) {
 
     // console.log("EIN to feed: " + arr[i].toString());  
     // console.log("Unconverted EIN: " + arr[i]);
 
     //console.log("Unconverted EIN: " + arr[i] + " / / " + "EIN to feed: " + arr[i].toString());
-
-    var EINsAsString = EINarr[i].toString();
+    console.log("for loop index: " + j)
+    var EINsAsString = EINarr[j].toString();
 
     var proxyUrl = "https://cors-anywhere.herokuapp.com/";
     var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINsAsString + ".json";
@@ -110,18 +110,27 @@ function getAddress(arr) {
     console.log("Type of first EIN: " + typeof (arr[0]));
     // console.log(EINarr);
     console.log("second fetch url: " + proxyUrl + searchByEIN);
+    console.log("for loop index: " + j)
 
     fetch(proxyUrl + searchByEIN)
       .then(function (response) {
+        console.log("for loop index: " + j)
         if (response.ok) {
+          console.log("for loop index: " + j)
           console.log(response);
           response.json()
             .then(function (addressData) {
-
+              j -= 1
               var addr = addressData.organization.address;
+              console.log("search result child" + searchResultsEl.children[j].textContent)
+              console.log("for loop index: " + j)
+              // console.log()
+              // console.log()
+              searchResultsEl.children[j].children[1].textContent = addr
               console.log("Address: " + addr);
 
               var zip = addressData.organization.zipcode;
+              searchResultsEl.children[j].children[4].textContent = zip
               console.log("Zip code: " + zip);
 
             });
