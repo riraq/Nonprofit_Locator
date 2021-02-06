@@ -1,5 +1,5 @@
 var searchBtn = document.getElementById("search-btn");
-var cityInput = document.getElementById("city-search");
+var cityInput = document.getElementById("city-search"); //input box
 var searchResultsEl = document.getElementById("searchResults")
 
 var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2"
@@ -51,42 +51,38 @@ function getOrgs(searchedCity) {
       });
   };
 
-// function to save prior searches
-    // array to save city searches
-    //function to move searches into array 
-    //function to store the array
-    //var citySearch = []
-// function recordCity(params) {
-//     var input = "city-search";
-        //input.citySearches.push[]
-// };
+  
+  //button is clicked
+  searchBtn.onclick = function () {
+    //input field is set to cityInput.value
+    var search_query = cityInput.value;
+    //array to hold search history
+    //output beign over written bc of 62, edit 
+    //was history becuase reffered to histry outside of scope (window history)
+    var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
+    if (searchHistory == null) { searchHistory = []} //initialization of empyt array BEFORE user interacts
+    //["search_query0", "search_query1", "search_query2"]; //edit for JSO
+    /// use array or object then decide how you will add items to the array or object
+    //SHIFT adds to beg of array, push to end 
+    //history[0] = search_query
+    alert("New search for storage? " + search_query + " for storage");
+    // console.log(history);
+    // console.log(typeof history);
+    //cityInput is PUSHED to history array
+    searchHistory.push(search_query);
+    console.log(searchHistory);
+    //history array is saved to loaclStorage
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+    console.log(typeof searchHistory);
+
+    return search_query
+    
+  };
+  var storedSearches = JSON.parse(localStorage.getItem("searchHistory")); 
 
 
 
-// function recordSearch() {
-//     var input = $("#search").val();
-//     var searches = getSearches();
-//     searches.push({initials: inputInitials, score: currentScore});
-//     searches = searches.sort(function (item, other) {
-//         return parseInt(other.search) - parseInt(item.search)        
-//     });
-//     searches = topScores.slice(0, 5);
-//     localStorage.searches = JSON.stringify(searches); //get this object and transform it into a string that looks like json
-//     $("#").hide();
-//     renderTopScores();
-// }
-// function recordScore() {
-//     var inputInitials = $("#initials").val();
-//     var topScores = getTopScores();
-//     topScores.push({initials: inputInitials, score: currentScore});
-//     topScores = topScores.sort(function (item, other) {
-//         return parseInt(other.score) - parseInt(item.score)        
-//     });
-//     topScores = topScores.slice(0, 5);
-//     localStorage.topScores = JSON.stringify(topScores); //get this object and transform it into a string that looks like json
-//     $("#scorePrompt").hide();
-//     renderTopScores();
-// }
+
 searchBtn.addEventListener("click", getOrgs);
 
 
