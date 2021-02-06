@@ -6,6 +6,8 @@
     <title>Document</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link rel="stylesheet" href="./assets/styles.css">
 </head>
@@ -17,12 +19,16 @@
     <br>
     <div class="field has-addons">
         <div class="control">
+<<<<<<< HEAD
         <input id="city-search" class="input" type="text" placeholder="Find a Nonprofit">
+=======
+            <input id="city-search" class="input" type="text" placeholder="Find a repository">
+>>>>>>> main
         </div>
         <div class="control">
-        <a id="search-btn" class="button is-info">
-            Search
-        </a>
+            <a id="search-btn" class="button is-info">
+                Search
+            </a>
         </div>
     </div>
 
@@ -37,41 +43,40 @@
             <option value="Miles Away">Miles Away</option>
             <option value="Other">Other</option>
         </select>
-        <ul id="firstResult">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-        <ul id="secondResult">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-        <ul id="thirdResult">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-        <ul id="fourthResult">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-        <ul id="fifthResult">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
+        
+        <div id="searchResults">
+            <ul id="firstResult">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul id="secondResult">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul id="thirdResult">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul id="fourthResult">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul id="fifthResult">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+
     </div>    
 
     <button>Previous</button>
@@ -79,14 +84,7 @@
 
     <div id="mapid"></div>
     <div id='map' style='width: 400px; height: 300px;'></div>
-    <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg';
-    var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11'
-    });
-    </script>
-
+    
     <script src="./assets/script.js"></script>
 </body>
 
