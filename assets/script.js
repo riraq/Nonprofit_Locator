@@ -6,6 +6,7 @@ var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2"
 
 var orgArr = [];
 var EINarr = [];
+var organizations = [];
 
 //inital fetch function below
 
@@ -21,23 +22,41 @@ function getOrgs(searchedCity) {
     .then(function (response) {
       if (response.ok) {
         console.log(response);
-        response.json()
+        return response.json()
           .then(function (data) {
-            for (var i = 0; i < searchResultsEl.children.length; i++) {
-              searchResultsEl.children[i].children[0].textContent = data.organizations[i].name
-              searchResultsEl.children[i].children[2].textContent = data.organizations[i].city
-              searchResultsEl.children[i].children[3].textContent = data.organizations[i].state
+            for (var i = 0; i < 5; i++) {
+
+              var organizationObject = {
+                name: "",
+                city: "",
+                state: "",
+                address: "",
+                zipCode: "",
+                ein: ""
+              }
+  
+              organizationObject.name = data.organizations[i].name;
+              organizationObject.city = data.organizations[i].city;
+              organizationObject.state = data.organizations[i].state;
+              organizationObject.ein = data.organizations[i].ein
+              organizations.push(organizationObject);
+              // searchResultsEl.children[i].children[0].textContent = data.organizations[i].name
+              // searchResultsEl.children[i].children[2].textContent = data.organizations[i].city
+              // searchResultsEl.children[i].children[3].textContent = data.organizations[i].state
             }
-            console.log("City searched: " + searchedCity)
-            console.log(data);
+            console.log(organizations)
             orgArr = data.organizations;
             // console.log("org array: " + orgArr);
-
-            readEIN(orgArr);
+            return organizations            
+          })
+          .then(function(organizationData){
+            console.log(organizationData)
+            console.log(organizations)
+            // readEIN(orgArr);
             // console.log("EINs: " + EINarr);
+            getAddress(organizationData);
 
-            getAddress(EINarr);
-          });
+          })
       } else {
         alert("Error: " + response.statusText);
       }
@@ -47,34 +66,34 @@ function getOrgs(searchedCity) {
     });
 };
 
+  
+  //button is clicked
+  searchBtn.onclick = function () {
+    //input field is set to cityInput.value
+    var search_query = cityInput.value;
+    //array to hold search history
+    //output beign over written bc of 62, edit 
+    //was history becuase reffered to histry outside of scope (window history)
+    var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
+    if (searchHistory == null) { searchHistory = []} //initialization of empyt array BEFORE user interacts
+    //["search_query0", "search_query1", "search_query2"]; //edit for JSO
+    /// use array or object then decide how you will add items to the array or object
+    //SHIFT adds to beg of array, push to end 
+    //history[0] = search_query
+    // alert("New search for storage? " + search_query + " for storage");
+    // console.log(history);
+    // console.log(typeof history);
+    //cityInput is PUSHED to history array
+    searchHistory.push(search_query);
+    console.log(searchHistory);
+    //history array is saved to loaclStorage
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+    console.log(typeof searchHistory);
 
-//button is clicked
-searchBtn.onclick = function () {
-  //input field is set to cityInput.value
-  var search_query = cityInput.value;
-  //array to hold search history
-  //output beign over written bc of 62, edit 
-  //was history becuase reffered to histry outside of scope (window history)
-  var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
-  if (searchHistory == null) { searchHistory = [] } //initialization of empyt array BEFORE user interacts
-  //["search_query0", "search_query1", "search_query2"]; //edit for JSO
-  /// use array or object then decide how you will add items to the array or object
-  //SHIFT adds to beg of array, push to end 
-  //history[0] = search_query
-  //alert("New search for storage? " + search_query + " for storage");
-  // console.log(history);
-  // console.log(typeof history);
-  //cityInput is PUSHED to history array
-  searchHistory.push(search_query);
-  console.log(searchHistory);
-  //history array is saved to loaclStorage
-  localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-  console.log(typeof searchHistory);
-
-  return search_query
-
-};
-var storedSearches = JSON.parse(localStorage.getItem("searchHistory"));
+    return search_query
+    
+  };
+  var storedSearches = JSON.parse(localStorage.getItem("searchHistory")); 
 
 
 
@@ -93,57 +112,95 @@ function readEIN(arr) {
 
 // Uses EINs to pull address and ZIP code for each org
 // Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
+var finalOrganizations = [];
 
-function getAddress(arr) {
+function getAddress(organizations) {
+  
   for (var j = 0; j < 5; j++) {
-
+    // console.log("for loop index: " + j)
     // console.log("EIN to feed: " + arr[i].toString());  
     // console.log("Unconverted EIN: " + arr[i]);
 
     //console.log("Unconverted EIN: " + arr[i] + " / / " + "EIN to feed: " + arr[i].toString());
-    console.log("for loop index: " + j)
-    var EINsAsString = EINarr[j].toString();
+    // console.log("for loop index: " + j)
+    var EINsAsString = organizations[j].ein.toString();
+    console.log("EINsAsString: " + EINsAsString)
 
     var proxyUrl = "https://cors-anywhere.herokuapp.com/";
     var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINsAsString + ".json";
 
-    console.log("Type of first EIN: " + typeof (arr[0]));
-    // console.log(EINarr);
-    console.log("second fetch url: " + proxyUrl + searchByEIN);
-    console.log("for loop index: " + j)
 
     fetch(proxyUrl + searchByEIN)
       .then(function (response) {
-        console.log("for loop index: " + j)
+
         if (response.ok) {
-          console.log("for loop index: " + j)
-          console.log(response);
-          response.json()
+
+          return response.json()
+          
             .then(function (addressData) {
-              j -= 1
+              console.log(addressData);
+              var finalOrganizationsObj = {
+                name: "",
+                address: "",
+                city: "",
+                state: "",
+                zipCode: "",
+                ein: ""
+              }
+              console.log(addressData.organization.name)
+              
+              finalOrganizationsObj.name = addressData.organization.name;
+              finalOrganizationsObj.city = addressData.organization.city;
+              finalOrganizationsObj.state = addressData.organization.state;
+              finalOrganizationsObj.ein = addressData.organization.ein
+              finalOrganizationsObj.address = addressData.organization.address
+              finalOrganizationsObj.zipCode = addressData.organization.zipcode
+              finalOrganizations.push(finalOrganizationsObj);
+              console.log(finalOrganizations.length)
+              console.log(organizations[0])
+              
+              if (finalOrganizations.length === organizations.length){
+                // append data to page
+                console.log(finalOrganizations)  
+                var newList = document.createElement("ul")
+                var newListItem = document.createElement("li")
+                
+                newList.append(finalOrganizations[0].name)
+              }
+              
+              
+              
+              // j -= 1
               var addr = addressData.organization.address;
-              console.log("search result child" + searchResultsEl.children[j].textContent)
-              console.log("for loop index: " + j)
-              // console.log()
-              // console.log()
-              searchResultsEl.children[j].children[1].textContent = addr
-              console.log("Address: " + addr);
-
               var zip = addressData.organization.zipcode;
-              searchResultsEl.children[j].children[4].textContent = zip
-              console.log("Zip code: " + zip);
+              // organizations[j].address = addr;
+              // organizations[j].zipCode = zip;
 
-            });
+              // console.log("search result child" + searchResultsEl.children[j-1].textContent)
+              // console.log("for loop index: " + j)
+
+              // searchResultsEl.children[j-1].children[1].textContent = addr
+              // console.log("Address: " + addr);
+
+              
+              // searchResultsEl.children[j-1].children[4].textContent = zip
+              // console.log("Zip code: " + zip);
+
+            })
+            // .then(function(){
+
+            // });
         } else {
           console.log("Error: " + response.statusText);
         }
       })
       .catch(function (error) {
-        console.log("Unable to connect to ProPublica Non-Profit Explorer");
+        console.log(error);
       });
   }
-}
+  
 
+}
 
 // this code is from the propublica api
 // $ curl https://projects.propublica.org/nonprofits/api/v2/search.json?q=propublica
@@ -215,45 +272,79 @@ var geocoder = new MapboxGeocoder({ // Initialize the geocoder
 
 var practiceData = []
 
-// fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg")
-// .then(function(response){
-//   console.log(response)
-//   return response.json()
-// })
-// .then(function(data){
-//   console.log(data)
-// })
+fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg")
+.then(function(response){
+  console.log(response)
+  return response.json()
+})
+.then(function(data){
+  console.log(data)
+})
 
 var geojson = {
-  type: 'FeatureCollection',
+  type: "FeatureCollection",
   features: [{
-    type: 'Feature',
+    type: "Feature",
     geometry: {
-      type: 'Point',
+      type: "Point",
       coordinates: [-77.032, 38.913]
     },
     properties: {
-      title: 'Mapbox',
-      description: 'Washington, D.C.'
+      title: "Org Name",
+      description: "Org Address"
     }
   },
   {
-    type: 'Feature',
+    type: "Feature",
     geometry: {
-      type: 'Point',
+      type: "Point",
+      coordinates: [-120.414, 37.776]
+    },
+    properties: {
+      title: "Org Name",
+      description: "Org Address"
+    }
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
       coordinates: [-122.414, 37.776]
     },
     properties: {
-      title: 'Mapbox',
-      description: 'San Francisco, California'
+      title: "Org Name",
+      description: "Org Address"
+    }
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [-118.414, 37.776]
+    },
+    properties: {
+      title: "Org Name",
+      description: "Org Address"
+    }
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [-116.414, 37.776]
+    },
+    properties: {
+      title: "Org Name",
+      description: "Org Address"
     }
   }]
+  
 };
 
 geojson.features.forEach(function (marker) {
 
   // create a HTML element for each feature
-  var el = document.createElement('div');
+  var el = document.createElement('div')
   el.className = 'marker';
 
   // make a marker for each feature and add to the map
