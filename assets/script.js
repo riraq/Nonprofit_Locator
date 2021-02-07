@@ -29,7 +29,9 @@ function getOrgs() {
   var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2/search.json?q=" + cityInput.value + "&ntee%5Bid%5D=3";
   //url format is [API base request URL] + [search text entered by user] + [NTEE code for animal and environment orgs]
   
-  fetch(/* proxyUrl + */proPubUrl)
+  fetch(/* proxyUrl + */proPubUrl, {
+    mode: "no-cors",
+  })
 
   .then(function (response) {
     if (response.ok) {
@@ -47,7 +49,8 @@ function getOrgs() {
     }
   })
 
-  .then(function(){
+  .then(function(data){
+    console.log(data);
     getAddress(EINarr);
   })
 
@@ -77,7 +80,9 @@ function getAddress() {
   for (var j = 0; j < 5; j++) {
     var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINarr[j] + ".json";
 
-    fetch(/* proxyUrl + */ searchByEIN)
+    fetch(/* proxyUrl + */ searchByEIN, {
+      mode: "no-cors"
+    })
 
     .then(function (response) {
       if (response.ok) {
