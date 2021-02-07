@@ -8,15 +8,28 @@ var orgArr = [];
 var EINarr = [];
 var organizations = [];
 
+var priorSearch;
+
 //inital fetch function below
 
 function getOrgs(searchedCity) {
   var searchInput = cityInput.value.toLowerCase();
   console.log("City searched: " + searchInput);
+  
+  if (priorSearch !== searchInput) {
+    organizations = [];
+    finalOrganizations = [];
+  }
+
+  priorSearch = searchInput;
+
+
+  console.log("Prior Search: " + priorSearch);
   var proxyUrl = "https://cors-anywhere.herokuapp.com/"
   var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2/search.json?q=" + cityInput.value + "&ntee%5Bid%5D=3";
   //url format is [API base request URL] + [search text entered by user] + [NTEE code for animal and environment orgs]
   //variable names subject to change
+  console.log("1st url: " + proPubUrl);
 
   fetch(proxyUrl + proPubUrl)
     .then(function (response) {
@@ -128,6 +141,7 @@ function getAddress(organizations) {
 
     var proxyUrl = "https://cors-anywhere.herokuapp.com/";
     var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINsAsString + ".json";
+    console.log("2nd url: " + searchByEIN);
 
 
     fetch(proxyUrl + searchByEIN)
@@ -157,7 +171,8 @@ function getAddress(organizations) {
               finalOrganizationsObj.zipCode = addressData.organization.zipcode
               finalOrganizations.push(finalOrganizationsObj);
               console.log(finalOrganizations.length)
-              console.log(organizations[0])
+              console.log(finalOrganizations);
+              //console.log(organizations[0])
               
               if (finalOrganizations.length === organizations.length){
                 // append data to page
