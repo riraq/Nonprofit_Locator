@@ -2,7 +2,7 @@ var searchBtn = document.getElementById("search-btn");
 var cityInput = document.getElementById("city-search"); //input box
 var searchResultsEl = document.getElementById("searchResults")
 
-var proxyUrl = "https://cors-anywhere.herokuapp.com/"
+var proxyUrl = "https://api.codetabs.com/v1/proxy?quest="
 
 var storedSearches = JSON.parse(localStorage.getItem("searchHistory")); 
 
@@ -29,9 +29,7 @@ function getOrgs() {
   var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2/search.json?q=" + cityInput.value + "&ntee%5Bid%5D=3";
   //url format is [API base request URL] + [search text entered by user] + [NTEE code for animal and environment orgs]
   
-  fetch(/* proxyUrl + */proPubUrl, {
-    mode: "no-cors",
-  })
+  fetch(proxyUrl + proPubUrl)
 
   .then(function (response) {
     if (response.ok) {
@@ -39,11 +37,13 @@ function getOrgs() {
       return response.json();
     }
     else {
+      console.log(response)
       throw response;
     }
   })
 
   .then(function (data) {
+    console.log(data)
     for (var i = 0; i < 5; i++) {
       EINarr.push(data.organizations[i].ein)
     }
@@ -54,10 +54,9 @@ function getOrgs() {
     getAddress(EINarr);
   })
 
-  // .catch(function (error) {
-  //   console.log(error)
-  //   console.log("Unable to connect to ProPublica Non-Profit Explorer");
-  // });
+  .catch(function (error) {
+    console.log("Unable to connect to ProPublica Non-Profit Explorer");
+  });
 };
 
 searchBtn.addEventListener("click", getOrgs);
@@ -80,9 +79,7 @@ function getAddress() {
   for (var j = 0; j < 5; j++) {
     var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINarr[j] + ".json";
 
-    fetch(/* proxyUrl + */ searchByEIN, {
-      mode: "no-cors"
-    })
+    fetch(proxyUrl + searchByEIN)
 
     .then(function (response) {
       if (response.ok) {
