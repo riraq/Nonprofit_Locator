@@ -11,8 +11,10 @@ var EINarr = [];
 var organizations = [];
 var finalOrganizations = [];
 
-
 var priorSearch;
+
+var finalIndex = storedSearches.length;
+var priorCity = document.getElementById("prior");
 
 //inital fetch function below
 
@@ -95,30 +97,7 @@ function getOrgs() {
   });
 };
 
-searchBtn.addEventListener("click", getOrgs);
 
-searchBtn.onclick = function () {
-  //input field is set to cityInput.value
-  var search_query = cityInput.value;
-  //array to hold search history
-  //output beign over written bc of 62, edit 
-  //was history becuase reffered to histry outside of scope (window history)
-  var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
-  if (searchHistory == null) { searchHistory = []} //initialization of empyt array BEFORE user interacts
-  //["search_query0", "search_query1", "search_query2"]; //edit for JSO
-  /// use array or object then decide how you will add items to the array or object
-  //SHIFT adds to beg of array, push to end 
-  //history[0] = search_query
-  // alert("New search for storage? " + search_query + " for storage");
-  // console.log(history);
-  // console.log(typeof history);
-  //cityInput is PUSHED to history array
-  searchHistory.push(search_query);
-  //history array is saved to loaclStorage
-  localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-
-  return search_query
-};
 
 
 
@@ -260,3 +239,54 @@ searchBtn.onclick = function () {
 // // query: (2)["los", "angeles"]
 // // type: "FeatureCollection"
 // // __proto__: Object
+
+
+function showLastSearch() {
+    finalIndex = storedSearches.length;
+    console.log("Search history length:" + finalIndex);
+    console.log("Search history: " + storedSearches);
+    console.log("Last searched: " + storedSearches[finalIndex - 1]);
+    priorCity.textContent = storedSearches[finalIndex - 1];
+
+}
+
+function init() {
+  showLastSearch();
+}
+
+function redoSearch() {
+  cityInput.value = priorCity.textContent;
+  console.log(priorCity.textContent);
+  getOrgs();
+}
+
+init();
+
+searchBtn.addEventListener("click", getOrgs);
+priorCity.addEventListener("click", redoSearch);
+
+searchBtn.onclick = function () {
+  //input field is set to cityInput.value
+  var search_query = cityInput.value;
+  //array to hold search history
+  //output beign over written bc of 62, edit 
+  //was history becuase reffered to histry outside of scope (window history)
+  var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
+  if (searchHistory == null) { searchHistory = []} //initialization of empyt array BEFORE user interacts
+  //["search_query0", "search_query1", "search_query2"]; //edit for JSO
+  /// use array or object then decide how you will add items to the array or object
+  //SHIFT adds to beg of array, push to end 
+  //history[0] = search_query
+  // alert("New search for storage? " + search_query + " for storage");
+  // console.log(history);
+  // console.log(typeof history);
+  //cityInput is PUSHED to history array
+  searchHistory.push(search_query);
+  //history array is saved to loaclStorage
+  localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+  return search_query
+
+  
+};
+
