@@ -13,7 +13,6 @@ var finalOrganizations = [];
 
 var priorSearch;
 
-var finalIndex = storedSearches.length;
 var priorCity = document.getElementById("prior");
 
 //inital fetch function below
@@ -80,6 +79,12 @@ function getOrgs() {
 
         if (finalOrganizations.length === EINarr.length){
           for(var k=0; k<EINarr.length; k++){
+            console.log("index: " + k);
+            console.log("searchResultsEl: " + searchResultsEl);
+            console.log("children: " + searchResultsEl.children[k]);
+            console.log("org: " + finalOrganizations[k].name);
+            console.log("finalOrgs length: " + finalOrganizations.length);
+            console.log("EINarr length: " + EINarr.length);
             searchResultsEl.children[k].children[0].innerHTML = finalOrganizations[k].name
             searchResultsEl.children[k].children[1].innerHTML = finalOrganizations[k].address
             searchResultsEl.children[k].children[2].innerHTML = finalOrganizations[k].city
@@ -242,11 +247,15 @@ function getOrgs() {
 
 
 function showLastSearch() {
+    var finalIndex;
+    if(storedSearches !== null ) {
     finalIndex = storedSearches.length;
     console.log("Search history length:" + finalIndex);
     console.log("Search history: " + storedSearches);
     console.log("Last searched: " + storedSearches[finalIndex - 1]);
-    priorCity.textContent = storedSearches[finalIndex - 1];
+    priorCity.textContent = storedSearches[finalIndex - 1];}
+
+    else return;
 
 }
 
