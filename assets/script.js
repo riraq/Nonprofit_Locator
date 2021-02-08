@@ -33,7 +33,6 @@ function getOrgs() {
 
   .then(function (response) {
     if (response.ok) {
-      console.log(response);
       return response.json();
     }
     else {
@@ -43,54 +42,25 @@ function getOrgs() {
   })
 
   .then(function (data) {
-    console.log(data)
     for (var i = 0; i < 5; i++) {
       EINarr.push(data.organizations[i].ein)
     }
   })
 
-  .then(function(data){
-    console.log(data);
-    getAddress(EINarr);
-  })
+  .then(function () {
+    for (var j = 0; j < EINarr.length; j++) {
+      var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINarr[j] + ".json";
+      fetch(proxyUrl + searchByEIN)
+      .then(function (response) {
+        if (response.ok) {
+          return response.json();
+        }
+        else {
+          throw response;
+        }
+      })
 
-  .catch(function (error) {
-    console.log("Unable to connect to ProPublica Non-Profit Explorer");
-  });
-};
-
-searchBtn.addEventListener("click", getOrgs);
-
-
-// Reads EIN from each returned org and pushes those numbers into a new array
-// Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
-function readEIN(arr) {
-  for (var i = 0; i < 5; i++) {
-    EINarr.push(arr[i].ein);
-  }
-}
-
-
-// Uses EINs to pull address and ZIP code for each org
-// Set to only loop 1 time currently, as too many fetch requests at once are triggering a 403 error from the server
-
-function getAddress() {
-
-  for (var j = 0; j < 5; j++) {
-    var searchByEIN = "https://projects.propublica.org/nonprofits/api/v2/organizations/" + EINarr[j] + ".json";
-
-    fetch(proxyUrl + searchByEIN)
-
-    .then(function (response) {
-      if (response.ok) {
-        return response.json();
-      }
-      else {
-        throw response;
-      }
-    })
-        
-    .then(function (addressData) {
+      .then(function (addressData) {
         var finalOrgObj = {
           name: "",
           address: "",
@@ -98,35 +68,34 @@ function getAddress() {
           state: "",
           zipCode: ""
         }
-        
+
         finalOrgObj.name = addressData.organization.name;
         finalOrgObj.city = addressData.organization.city;
         finalOrgObj.state = addressData.organization.state;
         finalOrgObj.address = addressData.organization.address;
         finalOrgObj.zipCode = addressData.organization.zipcode;
         finalOrganizations.push(finalOrgObj);
-        console.log(finalOrganizations.length);
-        console.log(EINarr.length);
-        // console.log(finalOrganizations);
-        // console.log(EINarr);
-    })
 
-    
-    .then(function(){
-      if (finalOrganizations.length === EINarr.length){
-        console.log("if activated")
-        var newList = document.createElement("ul")
-        var newListItem = document.createElement("li")
-        
-        for(var k=0; k<5; k++){
-          newList.append(newListItem)
-          searchResultsEl.append(newList)
+        if (finalOrganizations.length === EINarr.length){
+          for(var k=0; k<EINarr.length; k++){
+            searchResultsEl.children[k].children[0].innerHTML = finalOrganizations[k].name
+            searchResultsEl.children[k].children[1].innerHTML = finalOrganizations[k].address
+            searchResultsEl.children[k].children[2].innerHTML = finalOrganizations[k].city
+            searchResultsEl.children[k].children[3].innerHTML = finalOrganizations[k].state
+            searchResultsEl.children[k].children[4].innerHTML = finalOrganizations[k].zipCode
+          }
         }
-        
-      }
-    })
-  }
-}
+      })
+    }
+  })
+
+  
+  .catch(function (error) {
+    console.log("Unable to connect to ProPublica Non-Profit Explorer");
+  });
+};
+
+searchBtn.addEventListener("click", getOrgs);
 
 searchBtn.onclick = function () {
   //input field is set to cityInput.value
