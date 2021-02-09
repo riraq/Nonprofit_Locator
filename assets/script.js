@@ -112,6 +112,7 @@ showList.addEventListener("click", function(){
   searchResultsEl.removeAttribute("style");
   showList.disabled = true;
   showMap.disabled = false;
+  mapEl.style.display = "none"
 }
 )
 
