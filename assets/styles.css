@@ -1,8 +1,9 @@
 .title{
     text-align:center;
-    background-color: lightgray;
+    background-color: navy;
     background-size: 60px;
     border-style: inset;
+    color: white;
     
     
 }
@@ -58,4 +59,13 @@
 
 .hidden {
     visibility: hidden;
+}
+
+.results {
+    background-color: rgb(9, 131, 84);
+}
+
+.footer {
+    background-color: navy;
+    color: white;
 }
