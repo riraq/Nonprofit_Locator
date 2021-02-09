@@ -351,20 +351,20 @@ function showLastSearch() {
 
 }
 
-// function init() {
-//   showLastSearch();
-// }
+function init() {
+  showLastSearch();
+}
 
-// function redoSearch() {
-//   cityInput.value = priorCity.textContent;
-//   console.log(priorCity.textContent);
-//   getOrgs();
-// }
+function redoSearch() {
+  cityInput.value = priorCity.textContent;
+  console.log(priorCity.textContent);
+  getOrgs();
+}
 
-// init();
+init();
 
 searchBtn.addEventListener("click", getOrgs);
-// priorCity.addEventListener("click", redoSearch);
+priorCity.addEventListener("click", redoSearch);
 
 searchBtn.onclick = function () {
   //input field is set to cityInput.value
