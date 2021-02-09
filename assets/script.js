@@ -1,6 +1,9 @@
 var searchBtn = document.getElementById("search-btn");
 var cityInput = document.getElementById("city-search"); //input box
 var searchResultsEl = document.getElementById("searchResults")
+var showList = document.getElementById("showList");
+var showMap = document.getElementById("showMap");
+var mapEl = document.getElementById("map");
 
 var proxyUrl = "https://api.codetabs.com/v1/proxy?quest="
 
@@ -18,6 +21,8 @@ var priorCity = document.getElementById("prior");
 //inital fetch function below
 
 function getOrgs() {
+  showList.style.display = ""
+  showMap.style.display = ""
   
   var searchInput = cityInput.value.toLowerCase();
   
@@ -25,11 +30,7 @@ function getOrgs() {
     finalOrganizations = [];
     EINarr = [];
 
-    console.log(finalOrganizations);
-    console.log(EINarr);
 
-    console.log("prior search :" + priorSearch);
-    console.log("current search: " + searchInput);
   }
   priorSearch = searchInput;
 
@@ -43,7 +44,6 @@ function getOrgs() {
       return response.json();
     }
     else {
-      console.log(response)
       throw response;
     }
   })
@@ -85,142 +85,227 @@ function getOrgs() {
 
         if (finalOrganizations.length === EINarr.length){
           for(var k=0; k<EINarr.length; k++){
-            console.log("index: " + k);
-            console.log("searchResultsEl: " + searchResultsEl);
-            console.log("children: " + searchResultsEl.children[k]);
-            console.log("org: " + finalOrganizations[k].name);
-            console.log("finalOrgs length: " + finalOrganizations.length);
-            console.log("EINarr length: " + EINarr.length);
             searchResultsEl.children[k].children[0].innerHTML = finalOrganizations[k].name
+            geojson.features[k].properties.title = finalOrganizations[k].name            
             searchResultsEl.children[k].children[1].innerHTML = finalOrganizations[k].address
+            geojson.features[k].properties.description = finalOrganizations[k].address
             searchResultsEl.children[k].children[2].innerHTML = finalOrganizations[k].city
             searchResultsEl.children[k].children[3].innerHTML = finalOrganizations[k].state
             searchResultsEl.children[k].children[4].innerHTML = finalOrganizations[k].zipCode
             searchResultsEl.children[k].classList.remove("hidden");
           }
+
         }
       })
     }
   })
 
-  
   .catch(function (error) {
     console.log("Unable to connect to ProPublica Non-Profit Explorer");
   });
 };
 
 
+showList.addEventListener("click", function(){
+  searchResultsEl.removeAttribute("style");
+  showList.disabled = true;
+  showMap.disabled = false;
+}
+)
 
 
+var coordinatesArr = []
 
-// // access token for retrieving map
-// mapboxgl.accessToken = 'pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg';
 
-// // creates and styles map, sets location view to USA at an appropriate zoom level
-// var map = new mapboxgl.Map({
-//   container: 'map',
-//   style: 'mapbox://styles/mapbox/streets-v11',
-//   center: [-95, 37],
-//   zoom: 2,
-// });
+showMap.addEventListener("click", function () {
+  showMap.disabled = true;
+  showList.disabled = false;
+  searchResultsEl.style.display = "none"
+  mapEl.style.display = ""
+  console.log(geojson)
 
-// // adds map controls
-// map.addControl(new mapboxgl.NavigationControl());
+  // access token for retrieving map
+  mapboxgl.accessToken = 'pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg';
 
-// var geocoder = new MapboxGeocoder({ // Initialize the geocoder
-//   accessToken: mapboxgl.accessToken, // Set the access token
-//   mapboxgl: mapboxgl, // Set the mapbox-gl instance
-//   marker: false, // Do not use the default marker style
-// });
+  // creates and styles map, sets location view to USA at an appropriate zoom level
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [-95, 37],
+    zoom: 2,
+  });
 
-// var practiceData = []
+  // adds map controls
+  map.addControl(new mapboxgl.NavigationControl());
 
-// // fetch("https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg")
-// // .then(function(response){
-// //   console.log(response)
-// //   return response.json()
-// // })
-// // .then(function(data){
-// //   console.log(data)
-// // })
+  var urlMap1 = "https://api.mapbox.com/geocoding/v5/mapbox.places/"
+  var urlMap2 = ".json?access_token=pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg"
 
-// var geojson = {
-//   type: "FeatureCollection",
-//   features: [{
-//     type: "Feature",
-//     geometry: {
-//       type: "Point",
-//       coordinates: [-77.032, 38.913]
-//     },
-//     properties: {
-//       title: "Org Name",
-//       description: "Org Address"
-//     }
-//   },
-//   {
-//     type: "Feature",
-//     geometry: {
-//       type: "Point",
-//       coordinates: [-120.414, 37.776]
-//     },
-//     properties: {
-//       title: "Org Name",
-//       description: "Org Address"
-//     }
-//   },
-//   {
-//     type: "Feature",
-//     geometry: {
-//       type: "Point",
-//       coordinates: [-122.414, 37.776]
-//     },
-//     properties: {
-//       title: "Org Name",
-//       description: "Org Address"
-//     }
-//   },
-//   {
-//     type: "Feature",
-//     geometry: {
-//       type: "Point",
-//       coordinates: [-118.414, 37.776]
-//     },
-//     properties: {
-//       title: "Org Name",
-//       description: "Org Address"
-//     }
-//   },
-//   {
-//     type: "Feature",
-//     geometry: {
-//       type: "Point",
-//       coordinates: [-116.414, 37.776]
-//     },
-//     properties: {
-//       title: "Org Name",
-//       description: "Org Address"
-//     }
-//   }]
+
+    fetch(urlMap1 + geojson.features[0].properties.description + urlMap2)
+      .then(function (response) {
+        if (response.ok) {
+          console.log(response)
+          return response.json();
+        }
+        // else {
+        //   console.log(response)
+        //   throw response;
+        // }
+      })
+
+      .then(function (data) {
+        geojson.features[0].geometry.coordinates.push(data.features[0].center[0])
+        geojson.features[0].geometry.coordinates.push(data.features[0].center[1])
+      })
+      
+      fetch(urlMap1 + geojson.features[1].properties.description + urlMap2)
+      .then(function (response) {
+        if (response.ok) {
+          console.log(response)
+          return response.json();
+        }
+        // else {
+        //   console.log(response)
+        //   throw response;
+        // }
+      })
+
+      .then(function (data) {
+        geojson.features[1].geometry.coordinates.push(data.features[0].center[0])
+        geojson.features[1].geometry.coordinates.push(data.features[0].center[1])
+      })
+      
+      fetch(urlMap1 + geojson.features[2].properties.description + urlMap2)
+      .then(function (response) {
+        if (response.ok) {
+          console.log(response)
+          return response.json();
+        }
+        // else {
+        //   console.log(response)
+        //   throw response;
+        // }
+      })
+
+      .then(function (data) {
+        geojson.features[2].geometry.coordinates.push(data.features[0].center[0])
+        geojson.features[2].geometry.coordinates.push(data.features[0].center[1])
+      })
+      
+      fetch(urlMap1 + geojson.features[3].properties.description + urlMap2)
+      .then(function (response) {
+        if (response.ok) {
+          console.log(response)
+          return response.json();
+        }
+        // else {
+        //   console.log(response)
+        //   throw response;
+        // }
+      })
+
+      .then(function (data) {
+        geojson.features[3].geometry.coordinates.push(data.features[0].center[0])
+        geojson.features[3].geometry.coordinates.push(data.features[0].center[1])
+      })
+
+      fetch(urlMap1 + geojson.features[4].properties.description + urlMap2)
+      .then(function (response) {
+        if (response.ok) {
+          console.log(response)
+          return response.json();
+        }
+        // else {
+        //   console.log(response)
+        //   throw response;
+        // }
+      })
+
+      .then(function (data) {
+        geojson.features[4].geometry.coordinates.push(data.features[0].center[0])
+        geojson.features[4].geometry.coordinates.push(data.features[0].center[1])
+        console.log(geojson)
+      })
+
+      .then(
+        map.on('load', function (e) {
+          /* Add the data to your map as a layer */
+          map.addLayer({
+            "id": "locations",
+            "type": "circle",
+            /* Add a GeoJSON source containing place coordinates and information. */
+            "source": {
+              "type": "geojson",
+              "data": geojson
+            }
+          });
+        })
+      )
+})
+
+
+var geojson = {
+  type: "FeatureCollection",
+  features: [{
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: []
+    },
+    properties: {
+      title: "",
+      description: ""
+    }
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: []
+    },
+    properties: {
+      title: "",
+      description: ""
+    }
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: []
+    },
+    properties: {
+      title: "",
+      description: ""
+    }
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: []
+    },
+    properties: {
+      title: "",
+      description: ""
+    }
+  },
+  {
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: []
+    },
+    properties: {
+      title: "",
+      description: ""
+    }
+  }]
   
-// };
+};
 
-// geojson.features.forEach(function (marker) {
 
-//   // create a HTML element for each feature
-//   var el = document.createElement('div')
-//   el.className = 'marker';
-
-//   // make a marker for each feature and add to the map
-//   new mapboxgl.Marker(el)
-//     .setLngLat(marker.geometry.coordinates)
-//     .addTo(map);
-
-//   new mapboxgl.Marker(el)
-//     .setLngLat(marker.geometry.coordinates)
-//     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-//       .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
-//     .addTo(map);
-// });
 
 // // { type: "FeatureCollection", query: Array(2), features: Array(5), attribution: "NOTICE: © 2021 Mapbox and its suppliers. All right…y not be retained. POI(s) provided by Foursquare." }
 // // attribution: "NOTICE: © 2021 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
@@ -266,20 +351,20 @@ function showLastSearch() {
 
 }
 
-function init() {
-  showLastSearch();
-}
+// function init() {
+//   showLastSearch();
+// }
 
-function redoSearch() {
-  cityInput.value = priorCity.textContent;
-  console.log(priorCity.textContent);
-  getOrgs();
-}
+// function redoSearch() {
+//   cityInput.value = priorCity.textContent;
+//   console.log(priorCity.textContent);
+//   getOrgs();
+// }
 
-init();
+// init();
 
 searchBtn.addEventListener("click", getOrgs);
-priorCity.addEventListener("click", redoSearch);
+// priorCity.addEventListener("click", redoSearch);
 
 searchBtn.onclick = function () {
   //input field is set to cityInput.value
@@ -352,4 +437,4 @@ document.addEventListener('DOMContentLoaded', function () {
   function getAll(selector) {
       return Array.prototype.slice.call(document.querySelectorAll(selector), 0);
   }
-});
+})
