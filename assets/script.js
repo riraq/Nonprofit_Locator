@@ -22,8 +22,14 @@ function getOrgs() {
   var searchInput = cityInput.value.toLowerCase();
   
   if (priorSearch !== searchInput) {
-    organizations = [];
     finalOrganizations = [];
+    EINarr = [];
+
+    console.log(finalOrganizations);
+    console.log(EINarr);
+
+    console.log("prior search :" + priorSearch);
+    console.log("current search: " + searchInput);
   }
   priorSearch = searchInput;
 
