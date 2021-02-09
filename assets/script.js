@@ -269,22 +269,14 @@ searchBtn.onclick = function () {
   //input field is set to cityInput.value
   var search_query = cityInput.value;
   //array to hold search history
-  //output beign over written bc of 62, edit 
-  //was history becuase reffered to histry outside of scope (window history)
   var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
   if (searchHistory == null) { searchHistory = []} //initialization of empyt array BEFORE user interacts
-  //["search_query0", "search_query1", "search_query2"]; //edit for JSO
-  /// use array or object then decide how you will add items to the array or object
   //SHIFT adds to beg of array, push to end 
-  //history[0] = search_query
-  // alert("New search for storage? " + search_query + " for storage");
-  // console.log(history);
-  // console.log(typeof history);
   //cityInput is PUSHED to history array
   searchHistory.push(search_query);
   //history array is saved to loaclStorage
   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-
+  //search query is shown in LS, updates with each new search
   return search_query
 
   
