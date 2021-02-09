@@ -49,6 +49,7 @@ function getOrgs() {
   })
 
   .then(function (data) {
+    console.log(data)
     for (var i = 0; i < 5; i++) {
       EINarr.push(data.organizations[i].ein)
     }
@@ -68,6 +69,7 @@ function getOrgs() {
       })
 
       .then(function (addressData) {
+        console.log(addressData)
         var finalOrgObj = {
           name: "",
           address: "",
@@ -141,8 +143,9 @@ showMap.addEventListener("click", function () {
   var urlMap1 = "https://api.mapbox.com/geocoding/v5/mapbox.places/"
   var urlMap2 = ".json?access_token=pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg"
 
-
-    fetch(urlMap1 + geojson.features[0].properties.description + urlMap2)
+  var citySearch = finalOrganizations[0].city
+  var stateSearch = finalOrganizations[0].state
+    fetch(urlMap1 + geojson.features[0].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -159,7 +162,7 @@ showMap.addEventListener("click", function () {
         geojson.features[0].geometry.coordinates.push(data.features[0].center[1])
       })
       
-      fetch(urlMap1 + geojson.features[1].properties.description + urlMap2)
+      fetch(urlMap1 + geojson.features[1].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -176,7 +179,7 @@ showMap.addEventListener("click", function () {
         geojson.features[1].geometry.coordinates.push(data.features[0].center[1])
       })
       
-      fetch(urlMap1 + geojson.features[2].properties.description + urlMap2)
+      fetch(urlMap1 + geojson.features[2].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -193,7 +196,7 @@ showMap.addEventListener("click", function () {
         geojson.features[2].geometry.coordinates.push(data.features[0].center[1])
       })
       
-      fetch(urlMap1 + geojson.features[3].properties.description + urlMap2)
+      fetch(urlMap1 + geojson.features[3].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -210,7 +213,7 @@ showMap.addEventListener("click", function () {
         geojson.features[3].geometry.coordinates.push(data.features[0].center[1])
       })
 
-      fetch(urlMap1 + geojson.features[4].properties.description + urlMap2)
+      fetch(urlMap1 + geojson.features[4].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
