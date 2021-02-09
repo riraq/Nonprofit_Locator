@@ -96,6 +96,7 @@ function getOrgs() {
             searchResultsEl.children[k].children[2].innerHTML = finalOrganizations[k].city
             searchResultsEl.children[k].children[3].innerHTML = finalOrganizations[k].state
             searchResultsEl.children[k].children[4].innerHTML = finalOrganizations[k].zipCode
+            searchResultsEl.children[k].classList.remove("hidden");
           }
         }
       })
