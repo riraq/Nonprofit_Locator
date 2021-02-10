@@ -129,8 +129,8 @@ function getOrgs() {
 
 // clears search results
 function clearResults(){
-  console.log(geojson)
-  console.log(finalOrganizations)
+  console.log(cityInput)
+  cityInput.value = ""
   orgArr = [];
   EINarr = [];
   organizations = [];
@@ -257,14 +257,18 @@ showMap.addEventListener("click", function () {
       .then(
         map.on('load', function (e) {
           /* Add the data to your map as a layer */
-          map.addLayer({
-            "id": "locations",
-            "type": "circle",
-            /* Add a GeoJSON source containing place coordinates and information. */
-            "source": {
-              "type": "geojson",
-              "data": geojson
-            }
+          geojson.features.forEach(function(marker) {
+
+            // create a HTML element for each feature
+            var el = document.createElement('div');
+            el.className = 'marker';
+          
+            // make a marker for each feature and add to the map
+            new mapboxgl.Marker(el)
+              .setLngLat(marker.geometry.coordinates)
+              .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+              .addTo(map);
           });
         })
       )
@@ -346,7 +350,10 @@ function init() {
 
 function redoSearch(event) {
   event.preventDefault()
-  cityInput.value = priorCity.textContent;
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  cityInput.value = capitalizeFirstLetter(priorCity.textContent);
   getOrgs();
 }
 
