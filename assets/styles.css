@@ -4,8 +4,10 @@
     background-size: 60px;
     border-style: inset;
     color: white;
-    
-    
+}
+
+body{
+    text-align: center;
 }
 
 #beginning{
@@ -18,11 +20,30 @@
 #beginning-is-bordered{
     border: 1px solid black;
 }
-.field.has-addons{
+.field .has-addons{
     display: stretch;
     place-items: center;
+
 }
 
+ul{
+    border-width: 10px;
+    border-color: black;
+    padding;
+}
+
+#prior {
+    text-transform: capitalize;
+}
+
+#mapElement {
+    text-align: center;
+}
+
+li {
+    text-align: center;
+    color: black;
+}
 
 .mapboxgl-canary{
     float:right;
@@ -47,6 +68,7 @@
 }
 /* optimized for mobile device */
 .mapboxgl-canvas {
+    align-self: center;
     max-width: 100vw;
 }
 .mapboxgl-map {
@@ -59,10 +81,6 @@
 
 .hidden {
     visibility: hidden;
-}
-
-.results {
-    background-color: rgb(9, 131, 84);
 }
 
 .footer {

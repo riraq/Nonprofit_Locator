@@ -16,17 +16,19 @@
 
 <body>
     <h1 class="title is-1">Nonprofit Locator</h1>
+    
     <br>
+    
     <p id="beginning">How this works: Enter a city to find nonprofit near you. The results will show you the name, location, phone number and address of the results. Five results will be displayed at a time and more can be sorted through.</p>
+    
     <br>
-    <div class="field has-addons">
+
+    <div class="field columns has-addons is-centered">
         <div class="control">
         <input id="city-search" class="input" type="text" placeholder="Find a Nonprofit">
         </div>
         <div class="control">
-            <a id="search-btn" class="button is-info">
-                Search
-            </a>
+            <a id="search-btn" class="button is-info">Search</a>
         </div>
     </div>
 
@@ -46,51 +48,51 @@
             <option value="Other">Other</option>
         </select> -->
         
-        <div id="searchResults" class="results">
+        <div id="searchResults" class=" results column is-offset-one-fifth is-three-fifths">
             <ul id="firstResult" class="box hidden">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
             </ul>
             <ul id="secondResult" class="box hidden">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
             </ul>
             <ul id="thirdResult" class="box hidden">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
             </ul>
             <ul id="fourthResult" class="box hidden">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
             </ul>
             <ul id="fifthResult" class="box hidden">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
+                <li class="list"></li>
             </ul>
         </div>
 
     </div>    
 
+    <div id="mapElement" class="column is-half is-offset-one-quarter" >
+      <div id='map' class="box" style='width: 450px; height: 300px; display: none;'></div>
+    </div>
 
 
-    <!-- <div id="mapid"></div> -->
-    <div id='map' style='width: 400px; height: 300px; display: none;'></div>
-    
     <script src="./assets/script.js"></script>
 </body>
 
@@ -108,7 +110,7 @@
         is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
       </p>
       <p>Accessed using ProPublica API
-          ProPublica: https://www.propublica.org/
+          ProPublica: <a href="https://www.propublica.org/">https://www.propublica.org/</a>
       </p>
     </div>
   </footer>

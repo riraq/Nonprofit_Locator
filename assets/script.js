@@ -4,6 +4,7 @@ var searchResultsEl = document.getElementById("searchResults")
 var showList = document.getElementById("showList");
 var showMap = document.getElementById("showMap");
 var mapEl = document.getElementById("map");
+var listEl = document.getElementsByClassName("list")
 
 var proxyUrl = "https://api.codetabs.com/v1/proxy?quest="
 
@@ -21,6 +22,12 @@ var priorCity = document.getElementById("prior");
 //inital fetch function below
 
 function getOrgs() {
+  
+  if (searchBtn.innerHTML !== "Search"){
+    return
+  }
+  searchResultsEl.style.backgroundColor = "rgb(9, 131, 84)"
+  searchBtn.textContent = "Clear Results"
   showList.style.display = ""
   showMap.style.display = ""
   
@@ -108,18 +115,45 @@ function getOrgs() {
 };
 
 
-showList.addEventListener("click", function(){
+// clears search results
+searchBtn.addEventListener("click", function(){
+  if (searchBtn.textContent !== "Clear Results"){
+    return
+  }
+  orgArr = [];
+  EINarr = [];
+  organizations = [];
+  finalOrganizations = [];
+  mapEl.textContent = ""
+  showList.style.display = "none"
+  showMap.style.display = "none"
   searchResultsEl.removeAttribute("style");
   showList.disabled = true;
   showMap.disabled = false;
   mapEl.style.display = "none"
-}
-)
+  for(var q=0; q<5; q++){
+    searchResultsEl.children[q].classList.add("hidden")
+  }
+  for(var p=0; p<25; p++){
+    listEl[p].textContent = ""
+    console.log(listEl)
+  }
+})
 
+
+
+// switches to list display for results
+showList.addEventListener("click", function(){
+  searchResultsEl.removeAttribute("style");
+  searchResultsEl.style.backgroundColor = "rgb(9, 131, 84)"
+  showList.disabled = true;
+  showMap.disabled = false;
+  mapEl.style.display = "none"
+})
 
 var coordinatesArr = []
 
-
+// switches to map display for search results
 showMap.addEventListener("click", function () {
   showMap.disabled = true;
   showList.disabled = false;
@@ -146,7 +180,7 @@ showMap.addEventListener("click", function () {
 
   var citySearch = finalOrganizations[0].city
   var stateSearch = finalOrganizations[0].state
-    fetch(urlMap1 + geojson.features[0].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
+    fetch(urlMap1 + geojson.features[0].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -163,7 +197,7 @@ showMap.addEventListener("click", function () {
         geojson.features[0].geometry.coordinates.push(data.features[0].center[1])
       })
       
-      fetch(urlMap1 + geojson.features[1].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
+      fetch(urlMap1 + geojson.features[1].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -180,7 +214,7 @@ showMap.addEventListener("click", function () {
         geojson.features[1].geometry.coordinates.push(data.features[0].center[1])
       })
       
-      fetch(urlMap1 + geojson.features[2].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
+      fetch(urlMap1 + geojson.features[2].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -197,7 +231,7 @@ showMap.addEventListener("click", function () {
         geojson.features[2].geometry.coordinates.push(data.features[0].center[1])
       })
       
-      fetch(urlMap1 + geojson.features[3].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
+      fetch(urlMap1 + geojson.features[3].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -214,7 +248,7 @@ showMap.addEventListener("click", function () {
         geojson.features[3].geometry.coordinates.push(data.features[0].center[1])
       })
 
-      fetch(urlMap1 + geojson.features[4].properties.description + " " + citySearch + " " + stateSearch + urlMap2)
+      fetch(urlMap1 + geojson.features[4].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           console.log(response)
@@ -306,40 +340,7 @@ var geojson = {
       description: ""
     }
   }]
-  
 };
-
-
-
-// // { type: "FeatureCollection", query: Array(2), features: Array(5), attribution: "NOTICE: © 2021 Mapbox and its suppliers. All right…y not be retained. POI(s) provided by Foursquare." }
-// // attribution: "NOTICE: © 2021 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
-// // features: Array(5)
-// // 0:
-// // bbox: (4)[-118.521456965901, 33.9018913203336, -118.121305008073, 34.161440999758]
-// // center: Array(2)
-// // 0: -118.2439
-// // 1: 34.0544
-// // length: 2
-// // __proto__: Array(0)
-// // context: (2)[{ … }, { … }]
-// // geometry: { type: "Point", coordinates: Array(2) }
-// // id: "place.7397503093427640"
-// // place_name: "Los Angeles, California, United States"
-// // place_type: ["place"]
-// // properties: { wikidata: "Q65" }
-// // relevance: 1
-// // text: "Los Angeles"
-// // type: "Feature"
-// // __proto__: Object
-// // 1: { id: "place.10952642230180310", type: "Feature", place_type: Array(1), relevance: 1, properties: { … }, … }
-// // 2: { id: "poi.300647807514", type: "Feature", place_type: Array(1), relevance: 1, properties: { … }, … }
-// // 3: { id: "locality.9858218050180310", type: "Feature", place_type: Array(1), relevance: 1, properties: { … }, … }
-// // 4: { id: "neighborhood.2104633", type: "Feature", place_type: Array(1), relevance: 1, properties: { … }, … }
-// // length: 5
-// // __proto__: Array(0)
-// // query: (2)["los", "angeles"]
-// // type: "FeatureCollection"
-// // __proto__: Object
 
 
 function showLastSearch() {
@@ -349,17 +350,17 @@ function showLastSearch() {
     console.log("Search history length:" + finalIndex);
     console.log("Search history: " + storedSearches);
     console.log("Last searched: " + storedSearches[finalIndex - 1]);
-    priorCity.textContent = storedSearches[finalIndex - 1];}
-
+    priorCity.textContent = storedSearches[finalIndex - 1];
+  }
     else return;
-
 }
 
 function init() {
   showLastSearch();
 }
 
-function redoSearch() {
+function redoSearch(event) {
+  event.preventDefault()
   cityInput.value = priorCity.textContent;
   console.log(priorCity.textContent);
   getOrgs();
