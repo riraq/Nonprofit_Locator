@@ -29,9 +29,6 @@ function modal() {
 
 function getOrgs() {
   
-  if (searchBtn.innerHTML !== "Search"){
-    return
-  }
   searchResultsEl.style.backgroundColor = "rgb(9, 131, 84)"
   searchBtn.textContent = "Clear Results"
   showList.style.display = ""
@@ -141,10 +138,7 @@ function getOrgs() {
 
 
 // clears search results
-searchBtn.addEventListener("click", function(){
-  if (searchBtn.textContent !== "Clear Results"){
-    return
-  }
+function clearResults(){
   orgArr = [];
   EINarr = [];
   organizations = [];
@@ -156,6 +150,7 @@ searchBtn.addEventListener("click", function(){
   showList.disabled = true;
   showMap.disabled = false;
   mapEl.style.display = "none"
+  searchBtn.textContent = "Search"
   for(var q=0; q<5; q++){
     searchResultsEl.children[q].classList.add("hidden")
   }
@@ -163,7 +158,7 @@ searchBtn.addEventListener("click", function(){
     listEl[p].textContent = ""
     console.log(listEl)
   }
-})
+}
 
 
 
@@ -393,7 +388,14 @@ function redoSearch(event) {
 
 init();
 
-searchBtn.addEventListener("click", getOrgs);
+searchBtn.addEventListener("click", function(){
+  if(searchBtn.textContent === "Search"){
+    getOrgs()
+  }
+  else {
+    clearResults()
+  }
+});
 priorCity.addEventListener("click", redoSearch);
 
 searchBtn.onclick = function () {
