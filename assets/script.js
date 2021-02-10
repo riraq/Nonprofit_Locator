@@ -5,6 +5,8 @@ var showList = document.getElementById("showList");
 var showMap = document.getElementById("showMap");
 var mapEl = document.getElementById("map");
 var listEl = document.getElementsByClassName("list")
+var modalEl = document.getElementsByClassName("modal");
+var realModal = modalEl[0];
 
 var proxyUrl = "https://api.codetabs.com/v1/proxy?quest="
 
@@ -18,6 +20,10 @@ var finalOrganizations = [];
 var priorSearch;
 
 var priorCity = document.getElementById("prior");
+
+function modal() {
+  modalEl[0].classList.add("is-active");
+}
 
 //inital fetch function below
 
@@ -51,7 +57,15 @@ function getOrgs() {
       return response.json();
     }
     else {
-      throw response;
+      modal();
+      // // var modal = "#modal"
+      // var modal = document.getElementById("modal");
+      // function modal() {
+      //   modal.classList.add("is-active")
+      // }
+      //var message is-warning = document.getElementsByClassName(".message is-warning");
+      //var dltbtn = document.getElementsByClassName("dltbtn");
+      // throw response;
     }
   })
 
@@ -109,9 +123,20 @@ function getOrgs() {
     }
   })
 
+
   .catch(function (error) {
     console.log("Unable to connect to ProPublica Non-Profit Explorer");
+    modal();
+
   });
+  // .catch(function () {
+  //   // console.log(searchError);
+  //   // document.getElementById('.message is-warning').onlcick = function searchError() {
+  //   //   console.log('.messge is-warning');
+      
+  //   // } 
+  //   //article.'.message is-warning'
+  // });
 };
 
 
