@@ -37,7 +37,7 @@ Add color scheme to page and additional styling to search results to aid readabi
 
 ### Demo
 
-![Screencap of application](./assets/ScreenCap.jpg)
+![Screencap of application](https://github.com/riraq/Nonprofit_Locator/blob/main/assets/ScreenCap.JPG)
 
 Nonprofit Locator is deployed via gitHub pages. Click [here](https://riraq.github.io/Nonprofit_Locator/).
 
