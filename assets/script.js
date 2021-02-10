@@ -87,7 +87,6 @@ function getOrgs() {
       })
 
       .then(function (addressData) {
-        console.log(addressData)
         var finalOrgObj = {
           name: "",
           address: "",
@@ -122,23 +121,16 @@ function getOrgs() {
 
 
   .catch(function (error) {
-    console.log("Unable to connect to ProPublica Non-Profit Explorer");
     modal();
 
   });
-  // .catch(function () {
-  //   // console.log(searchError);
-  //   // document.getElementById('.message is-warning').onlcick = function searchError() {
-  //   //   console.log('.messge is-warning');
-      
-  //   // } 
-  //   //article.'.message is-warning'
-  // });
 };
 
 
 // clears search results
 function clearResults(){
+  console.log(geojson)
+  console.log(finalOrganizations)
   orgArr = [];
   EINarr = [];
   organizations = [];
@@ -151,12 +143,12 @@ function clearResults(){
   showMap.disabled = false;
   mapEl.style.display = "none"
   searchBtn.textContent = "Search"
-  for(var q=0; q<5; q++){
-    searchResultsEl.children[q].classList.add("hidden")
+    for(var q=0; q<5; q++){
+      geojson.features[q].geometry.coordinates = []
+      searchResultsEl.children[q].classList.add("hidden")
   }
   for(var p=0; p<25; p++){
     listEl[p].textContent = ""
-    console.log(listEl)
   }
 }
 
@@ -179,7 +171,6 @@ showMap.addEventListener("click", function () {
   showList.disabled = false;
   searchResultsEl.style.display = "none"
   mapEl.style.display = ""
-  console.log(geojson)
 
   // access token for retrieving map
   mapboxgl.accessToken = 'pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg';
@@ -191,7 +182,7 @@ showMap.addEventListener("click", function () {
     center: [-95, 37],
     zoom: 2,
   });
-
+  console.log(map)
   // adds map controls
   map.addControl(new mapboxgl.NavigationControl());
 
@@ -203,30 +194,23 @@ showMap.addEventListener("click", function () {
     fetch(urlMap1 + geojson.features[0].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
-          console.log(response)
           return response.json();
         }
-        // else {
-        //   console.log(response)
-        //   throw response;
-        // }
       })
 
       .then(function (data) {
-        geojson.features[0].geometry.coordinates.push(data.features[0].center[0])
-        geojson.features[0].geometry.coordinates.push(data.features[0].center[1])
+        geojson.features[0].geometry.coordinates.push(data.features[0].center[0]);
+        geojson.features[0].geometry.coordinates.push(data.features[0].center[1]);
+        map.transform.center.lng = geojson.features[0].geometry.coordinates[0];
+        map.transform.center.lat = geojson.features[0].geometry.coordinates[1];
+        map.transform.zoom = 8;
       })
       
       fetch(urlMap1 + geojson.features[1].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
-          console.log(response)
           return response.json();
         }
-        // else {
-        //   console.log(response)
-        //   throw response;
-        // }
       })
 
       .then(function (data) {
@@ -237,13 +221,8 @@ showMap.addEventListener("click", function () {
       fetch(urlMap1 + geojson.features[2].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
-          console.log(response)
           return response.json();
         }
-        // else {
-        //   console.log(response)
-        //   throw response;
-        // }
       })
 
       .then(function (data) {
@@ -254,13 +233,8 @@ showMap.addEventListener("click", function () {
       fetch(urlMap1 + geojson.features[3].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
-          console.log(response)
           return response.json();
         }
-        // else {
-        //   console.log(response)
-        //   throw response;
-        // }
       })
 
       .then(function (data) {
@@ -271,19 +245,13 @@ showMap.addEventListener("click", function () {
       fetch(urlMap1 + geojson.features[4].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
-          console.log(response)
           return response.json();
         }
-        // else {
-        //   console.log(response)
-        //   throw response;
-        // }
       })
 
       .then(function (data) {
         geojson.features[4].geometry.coordinates.push(data.features[0].center[0])
         geojson.features[4].geometry.coordinates.push(data.features[0].center[1])
-        console.log(geojson)
       })
 
       .then(
@@ -367,9 +335,6 @@ function showLastSearch() {
     var finalIndex;
     if(storedSearches !== null ) {
     finalIndex = storedSearches.length;
-    console.log("Search history length:" + finalIndex);
-    console.log("Search history: " + storedSearches);
-    console.log("Last searched: " + storedSearches[finalIndex - 1]);
     priorCity.textContent = storedSearches[finalIndex - 1];
   }
     else return;
@@ -382,7 +347,6 @@ function init() {
 function redoSearch(event) {
   event.preventDefault()
   cityInput.value = priorCity.textContent;
-  console.log(priorCity.textContent);
   getOrgs();
 }
 
@@ -406,13 +370,6 @@ searchBtn.onclick = function () {
   //was history becuase reffered to histry outside of scope (window history)
   var searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
   if (searchHistory == null) { searchHistory = []} //initialization of empyt array BEFORE user interacts
-  //["search_query0", "search_query1", "search_query2"]; //edit for JSO
-  /// use array or object then decide how you will add items to the array or object
-  //SHIFT adds to beg of array, push to end 
-  //history[0] = search_query
-  // alert("New search for storage? " + search_query + " for storage");
-  // console.log(history);
-  // console.log(typeof history);
   //cityInput is PUSHED to history array
   searchHistory.push(search_query);
   //history array is saved to loaclStorage
