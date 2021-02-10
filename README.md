@@ -12,10 +12,10 @@ The application demonstrates the ability to use the CSS framework Bulma as well 
 
 ## Roles
 
-Rony: Added map API. JavaScript functions. HTML structure. Managed repo.
-Daniel: Creating and debugging fetch requests to ProPublica Nonprofit Explorer API. Added quick search feature to reload previously searched city with one click. Added color scheme.
-Kayleigh: Adding error message to modal. Setting up function to save search history in local storage. Presentation director.
-Angelica: Using bulma documentation to style css and html. Adding modal and finding javascript to work with Bulma.
+- Rony: Added map API. JavaScript functions. HTML structure. Managed repo.
+- Daniel: Creating and debugging fetch requests to ProPublica Nonprofit Explorer API. Added quick search feature to reload previously searched city with one click. Added color scheme.
+- Kayleigh: Adding error message to modal. Setting up function to save search history in local storage. Presentation director.
+- Angelica: Using bulma documentation to style css and html. Adding modal and finding javascript to work with Bulma.
 
 
 ## MVP
@@ -32,12 +32,12 @@ Add function to store past searches in local storage. Also added quicksearch fea
 
 ### Phase 3
 
-Add color scheme to page and additional styling to search results to aid readability. Map now generates markers based on the location of the organizations found by the search. Modal popup has been added to advise user if an invalid city name is entered.
+Add color scheme to page and additional styling to search results to aid readability. Map now generates markers based on the location of the organizations found by the search. Markers can be clicked to show a popup with information. Modal popup has been added to advise user if an invalid city name is entered.
 
 
 ### Demo
 
-![Screencap of application](https://github.com/riraq/Nonprofit_Locator/blob/main/assets/ScreenCap.JPG)
+![Screencap of application](./assets/ScreenCap.jpg)
 
 Nonprofit Locator is deployed via gitHub pages. Click [here](https://riraq.github.io/Nonprofit_Locator/).
 
