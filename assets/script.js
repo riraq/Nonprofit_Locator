@@ -39,9 +39,8 @@ function getOrgs() {
   if (priorSearch !== searchInput) {
     finalOrganizations = [];
     EINarr = [];
-
-
   }
+
   priorSearch = searchInput;
 
   var proPubUrl = "https://projects.propublica.org/nonprofits/api/v2/search.json?q=" + cityInput.value + "&ntee%5Bid%5D=3";
@@ -67,7 +66,6 @@ function getOrgs() {
   })
 
   .then(function (data) {
-    console.log(data)
     for (var i = 0; i < 5; i++) {
       EINarr.push(data.organizations[i].ein)
     }
@@ -119,17 +117,14 @@ function getOrgs() {
     }
   })
 
-
   .catch(function (error) {
     modal();
 
   });
 };
 
-
 // clears search results
 function clearResults(){
-  console.log(cityInput)
   cityInput.value = ""
   orgArr = [];
   EINarr = [];
@@ -143,15 +138,14 @@ function clearResults(){
   showMap.disabled = false;
   mapEl.style.display = "none"
   searchBtn.textContent = "Search"
-    for(var q=0; q<5; q++){
-      geojson.features[q].geometry.coordinates = []
-      searchResultsEl.children[q].classList.add("hidden")
+  for(var q=0; q<5; q++){
+    geojson.features[q].geometry.coordinates = []
+    searchResultsEl.children[q].classList.add("hidden")
   }
   for(var p=0; p<25; p++){
     listEl[p].textContent = ""
   }
 }
-
 
 
 // switches to list display for results
@@ -167,10 +161,20 @@ var coordinatesArr = []
 
 // switches to map display for search results
 showMap.addEventListener("click", function () {
+
+  if(showList.disabled === false){
+    mapEl.style.display = ""
+    return
+  }
+
   showMap.disabled = true;
   showList.disabled = false;
   searchResultsEl.style.display = "none"
   mapEl.style.display = ""
+
+  for(var q=0; q<5; q++){
+    geojson.features[q].geometry.coordinates = []
+  }
 
   // access token for retrieving map
   mapboxgl.accessToken = 'pk.eyJ1IjoicmlyYXEiLCJhIjoiY2trcTdkOW91MDE2dzJ5bms1eG4xcG83byJ9.LhDGv60vuX4Xu1SrIL5Aeg';
@@ -182,7 +186,6 @@ showMap.addEventListener("click", function () {
     center: [-95, 37],
     zoom: 2,
   });
-  console.log(map)
   // adds map controls
   map.addControl(new mapboxgl.NavigationControl());
 
@@ -191,7 +194,7 @@ showMap.addEventListener("click", function () {
 
   var citySearch = finalOrganizations[0].city
   var stateSearch = finalOrganizations[0].state
-    fetch(urlMap1 + geojson.features[0].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
+    fetch(urlMap1 + geojson.features[0].properties.description.split("PO BOX")+ geojson.features[0].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           return response.json();
@@ -206,7 +209,7 @@ showMap.addEventListener("click", function () {
         map.transform.zoom = 8;
       })
       
-      fetch(urlMap1 + geojson.features[1].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
+      fetch(urlMap1 + geojson.features[1].properties.description.split("PO BOX")+ geojson.features[1].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           return response.json();
@@ -218,7 +221,7 @@ showMap.addEventListener("click", function () {
         geojson.features[1].geometry.coordinates.push(data.features[0].center[1])
       })
       
-      fetch(urlMap1 + geojson.features[2].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
+      fetch(urlMap1 + geojson.features[2].properties.description.split("PO BOX")+ geojson.features[2].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           return response.json();
@@ -230,7 +233,7 @@ showMap.addEventListener("click", function () {
         geojson.features[2].geometry.coordinates.push(data.features[0].center[1])
       })
       
-      fetch(urlMap1 + geojson.features[3].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
+      fetch(urlMap1 + geojson.features[3].properties.description.split("PO BOX")+ geojson.features[3].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           return response.json();
@@ -242,7 +245,7 @@ showMap.addEventListener("click", function () {
         geojson.features[3].geometry.coordinates.push(data.features[0].center[1])
       })
 
-      fetch(urlMap1 + geojson.features[4].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
+      fetch(urlMap1 + geojson.features[4].properties.description.split("PO BOX")+ geojson.features[4].properties.description.split("#") + " " + citySearch + " " + stateSearch + urlMap2)
       .then(function (response) {
         if (response.ok) {
           return response.json();
@@ -270,7 +273,7 @@ showMap.addEventListener("click", function () {
                 .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
               .addTo(map);
           });
-        })
+        }),
       )
 })
 
